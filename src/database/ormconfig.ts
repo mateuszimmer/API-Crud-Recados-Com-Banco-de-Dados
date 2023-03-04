@@ -9,7 +9,8 @@ import { CreateTableUsuariosLogados1677510544482 } from "./migrations/1677510544
 
 const config: DataSourceOptions = {
   type: "postgres",
-  url: process.env.DATABASE_URL,
+  // url: process.env.DATABASE_URL,
+  url: 'postgres://masxnkum:5QJqpva37MgUxyrCFO2qUMjgkL1IruTO@babar.db.elephantsql.com/masxnkum',
   synchronize: false,
   logging: false,
   entities: [RecadoEntity, UsuarioEntity, UsuarioLogadoEntity],
