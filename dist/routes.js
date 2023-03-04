@@ -6,7 +6,7 @@ const usuario_controller_1 = require("./controllers/usuario.controller");
 const recados_controller_1 = require("./controllers/recados.controller");
 const usuarioLogado_controller_1 = require("./controllers/usuarioLogado.controller");
 exports.default = (app) => {
-    app.get('/', (request, response) => response.send('Está Funcionando'));
+    app.get('/', (request, response) => response.send('Bora, bil!'));
     const usuarioController = new usuario_controller_1.UsuarioController();
     app.post('/usuario/novo', [checkSenhaResenha_1.checkSenhaResenha, checkEmailESenha_1.checkEmailESenha], usuarioController.criate);
     app.post('/logar', [checkEmailESenha_1.checkEmailESenha], usuarioController.logarUser);
