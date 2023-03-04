@@ -6,7 +6,7 @@ import { RecadosController } from './controllers/recados.controller';
 import { UsuarioLogadoController } from './controllers/usuarioLogado.controller';
 
 export default (app: Express) => {
-    app.get('/', (request, response) => response.send('Está Funcionando'))
+    app.get('/', (request, response) => response.send('Bora, bil!'))
 
     const usuarioController = new UsuarioController();
     app.post('/usuario/novo', [ checkSenhaResenha, checkEmailESenha ], usuarioController.criate)
