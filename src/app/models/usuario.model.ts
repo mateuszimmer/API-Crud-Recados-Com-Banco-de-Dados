@@ -1,14 +1,21 @@
 export class Usuario {
 
     private constructor(
-        private email: string, 
-        private senha: string
+        public email: string, 
+        public senha: string
         ) {
             this.email = email,
             this.senha = senha
         }
 
-    public static criate(nome: string, email: string) {
-        return new Usuario(nome, email);
+    public static criate(email: string, senha: string) {
+        return new Usuario(email, senha);
+    }
+
+    public toJson() {
+        return {
+            email: this.email,
+            senha: this.senha
+        }
     }
 }

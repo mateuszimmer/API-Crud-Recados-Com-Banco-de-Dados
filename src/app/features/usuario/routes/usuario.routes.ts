@@ -2,12 +2,13 @@ import { Router } from "express";
 import { checkEmailESenha } from "../../../shared/middlewares/checkEmailESenha";
 import { checkSenhaResenha } from "../../../shared/middlewares/checkSenhaResenha";
 import { UsuarioController } from "../controllers/usuario.controller";
+import { verificaExisteUsuario } from "../validator/verifica-existe-usuario.validator";
 
 const usuarioRoutes = Router()
 
 usuarioRoutes.post(
     '/novo', 
-    [ checkSenhaResenha, checkEmailESenha ], 
+    [ checkSenhaResenha, checkEmailESenha, verificaExisteUsuario ], 
     new UsuarioController().criate,
 )
 
