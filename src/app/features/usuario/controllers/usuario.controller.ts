@@ -2,64 +2,32 @@ import { Request, Response } from "express";
 import { IResposta } from "../../../shared/interfaces/IResposta";
 import { UsuarioRepository } from "../repositories/usuario.repository";
 import { UsuarioLogadoRepository } from "../../usuario-logado/repositories/usuarioLogado.repository";
+import { CreateUsuarioUseCase } from "../usecases/create-usuario.usecase";
+import { HttpHelper } from "../../../shared/util/http.helper";
+import { LogarUsuario } from "../usecases/login.usecase";
 
 export class UsuarioController {
 
     async criate(req: Request, res: Response) {
-        const { email, senha } = req.body
+        try {
+            const usecase = new CreateUsuarioUseCase(new UsuarioRepository());
+            const resultado = await usecase.execute(req.body);
 
-        const repository = new UsuarioRepository()
+            HttpHelper.success(res, resultado, 'API - Usuario cadastrado com Sucesso!')
 
-        const resposta = await repository.create(email, senha)
-
-        if (resposta){
-            return res.status(200).json(
-                {
-                    success: true,
-                    message: 'Usuário cadastrado',
-                    data: {
-                        email: resposta.email,
-                        createdAt: resposta.createdAt
-                    }
-                } as IResposta
-            )
+        } catch (error: any) {
+            HttpHelper.reqError(res, error)
         }
-
-        return res.status(400).json(
-            {
-                success: false,
-                message: 'API - Não foi possível cadastrar usuário com as informações apresentadas',
-                data: null
-            } as IResposta
-        )
     }
 
     async logarUser(req: Request, res: Response) {
-        const { email, senha } = req.body
+        try {
+            const usecase = new LogarUsuario(new UsuarioRepository());
+            const resultado = await usecase.execute(req.body)
 
-        const repository = new UsuarioRepository();
-        const resposta = await repository.getByEmail(email, senha)
-        
-        if (resposta){
-            const repositoryLogado = new UsuarioLogadoRepository();
-            const token = (await repositoryLogado.setLogado(email)).idTemporario
+        } catch (error: any) {
 
-            return res.status(200).json(
-                {
-                    success: true,
-                    message: 'API - Autorizado',
-                    data: token
-                } as IResposta
-            )
         }
-
-        return res.status(404).json(
-            {
-                success: false,
-                message: 'Não autorizado',
-                data: null
-            } as IResposta
-        )
     }
 
     async getAll(req: Request, res: Response) {
