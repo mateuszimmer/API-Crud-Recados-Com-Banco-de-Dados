@@ -1,4 +1,4 @@
-import { UsuarioLogadoEntity } from "../database/entities/usuarioLogado.entity";
+import { UsuarioLogadoEntity } from "../../../shared/entities/usuarioLogado.entity";
 import { v4 as uuid } from 'uuid'
 import { DeleteResult } from "typeorm";
 

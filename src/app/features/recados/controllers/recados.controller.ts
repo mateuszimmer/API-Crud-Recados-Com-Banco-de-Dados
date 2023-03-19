@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
-import { RecadoEntity } from "../database/entities/recado.entity";
-import { IRecado } from "../interfaces/IRecado";
-import { IResposta } from "../interfaces/IResposta";
+import { IRecado } from "../../../shared/interfaces/IRecado";
+import { IResposta } from "../../../shared/interfaces/IResposta";
 import { RecadoRepository } from "../repositories/recado.repository";
-import { UsuarioLogadoRepository } from "../repositories/usuarioLogado.repository";
+import { UsuarioLogadoRepository } from "../../usuario-logado/repositories/usuarioLogado.repository";
 
 export class RecadosController {
     async create(req: Request, res: Response) {

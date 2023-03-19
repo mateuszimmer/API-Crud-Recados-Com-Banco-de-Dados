@@ -1,16 +1,9 @@
-import express from 'express'
-import appRoutes from './routes'
-import cors from 'cors'
-import { pgHelper } from './database/pg-helper';
+import { DatabaseConnection } from "./main/database/typeorm.connections";
+import { runServer } from "./main/server/express.server";
 
-const api = express()
-
-api.use(express.json(), cors())
-
-appRoutes(api)
-
-pgHelper
-    .connect()
-    .then(() => {
-        api.listen(process.env.PORT || 8080, () => console.log('API Rodando'))
+Promise.all([DatabaseConnection.connect()])
+    .then(runServer)
+    .catch((error: any) => {
+        console.log('Erro ao iniciar');
+        console.log(error);
     })

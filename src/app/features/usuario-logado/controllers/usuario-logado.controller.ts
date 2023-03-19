@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IResposta } from "../interfaces/IResposta";
+import { IResposta } from "../../../shared/interfaces/IResposta";
 import { UsuarioLogadoRepository } from "../repositories/usuarioLogado.repository";
 
 export class UsuarioLogadoController {

@@ -1,5 +1,5 @@
-import { DeleteResult, ILike, Like } from "typeorm"
-import { RecadoEntity } from "../database/entities/recado.entity"
+import { DeleteResult, ILike } from "typeorm"
+import { RecadoEntity } from "../../../shared/entities/recado.entity"
 
 export class RecadoRepository {
     async create(titulo: string, descricao: string, data: string, usuario: string): Promise<RecadoEntity> {
@@ -10,11 +10,11 @@ export class RecadoRepository {
                 data,
                 usuario
             }
-        )
+        );
 
-        const resposta = await novoRecado.save()
+        const resposta = await novoRecado.save();
 
-        return resposta
+        return resposta;
     }
 
     async getById(id: string, usuario?: string): Promise<RecadoEntity | null> {
@@ -24,9 +24,9 @@ export class RecadoRepository {
                 id,
                 usuario
             }
-        })
+        });
 
-        return pesquisa
+        return pesquisa;
     }
 
     async getByUser(email: string, arquivado?: boolean, titulo?: string): Promise<RecadoEntity[]> {
@@ -37,32 +37,32 @@ export class RecadoRepository {
                     titulo: ILike(`%${titulo}%`),
                     arquivado: (arquivado? true : false)
                 } 
-            })
-            return recados
+            });
+            return recados;
         } else {
             const recados = await RecadoEntity.find({
                 where: {
                     usuario: email,
                     arquivado: arquivado? true : false,
                 } 
-            })
-            return recados
+            });
+            return recados;
         }
 
     }
 
     async update(id: string, titulo: string, descricao: string, data: string, usuario: string, arquivado: boolean): Promise<RecadoEntity | null>{
-        const recado = await this.getById(id, usuario)
-        if(!recado) return null
+        const recado = await this.getById(id, usuario);
+        if(!recado) return null;
 
-        recado.titulo = titulo
-        recado.descricao = descricao
-        recado.data = data
-        recado.arquivado = arquivado
+        recado.titulo = titulo;
+        recado.descricao = descricao;
+        recado.data = data;
+        recado.arquivado = arquivado;
 
-        const retorno = await recado.save()
+        const retorno = await recado.save();
         
-        return retorno
+        return retorno;
     }
 
     async delete(id: string, usuario: string): Promise<void | null | DeleteResult>{
@@ -70,7 +70,7 @@ export class RecadoRepository {
         const retorno = await RecadoEntity.delete({
             id,
             usuario
-        })
-        return retorno
+        });
+        return retorno;
     }
 }

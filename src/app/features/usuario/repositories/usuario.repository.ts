@@ -1,6 +1,6 @@
-import { UsuarioEntity } from "../database/entities/usuario.entity";
-import { IResposta } from "../interfaces/IResposta";
-import { UsuarioLogadoRepository } from "./usuarioLogado.repository";
+import { UsuarioEntity } from "../../../shared/entities/usuario.entity";
+import { IResposta } from "../../../shared/interfaces/IResposta";
+import { UsuarioLogadoRepository } from "../../usuario-logado/repositories/usuarioLogado.repository";
 
 
 export class UsuarioRepository {

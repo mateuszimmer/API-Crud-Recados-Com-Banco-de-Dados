@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { IResposta } from "../interfaces/IResposta";
+import { IResposta } from "../../../shared/interfaces/IResposta";
 import { UsuarioRepository } from "../repositories/usuario.repository";
-import { UsuarioLogadoRepository } from "../repositories/usuarioLogado.repository";
+import { UsuarioLogadoRepository } from "../../usuario-logado/repositories/usuarioLogado.repository";
 
 export class UsuarioController {
 
