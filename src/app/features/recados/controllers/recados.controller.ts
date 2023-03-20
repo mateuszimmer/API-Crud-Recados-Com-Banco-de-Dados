@@ -3,53 +3,41 @@ import { IRecado } from "../../../shared/interfaces/IRecado";
 import { IResposta } from "../../../shared/interfaces/IResposta";
 import { RecadoRepository } from "../repositories/recado.repository";
 import { UsuarioLogadoRepository } from "../../usuario-logado/repositories/usuarioLogado.repository";
+import { CriarRecadoUseCase } from "../usecases/create-recado.usecase";
+import { HttpHelper } from "../../../shared/util/http.helper";
+import { GetRecadoByIdUseCase } from "../usecases/get-recado-id.usecase";
 
 export class RecadosController {
     async create(req: Request, res: Response) {
-        const { titulo, descricao, data, usuario } = req.body
-
-        if(!titulo || !descricao || !data || !usuario) {
-            return res.status(400).json(
+        try {
+            const usecase = new CriarRecadoUseCase(new RecadoRepository())
+            const novoRecado = await usecase.execute(req.body)
+    
+            return res.status(200).json(
                 {
-                    success: false,
-                    message: 'Todas as informações devem ser preenchidas',
-                    data: null
+                    success: true,
+                    message: 'Recado Cadastrado',
+                    data: novoRecado
                 } as IResposta
-            )}
+            )
 
-        const repLogado = new UsuarioLogadoRepository()
-        const emailLogado = await repLogado.usuarioLogado(usuario)
-
-        if (!emailLogado) return res.status(401).json(
-            {
-                success: false,
-                message: "Usuario não logado",
-                data: null
-            } as IResposta
-        )
-
-        const repository = new RecadoRepository()
-        const novoRecado = await repository.create(titulo, descricao, data, emailLogado)
-
-        return res.status(200).json(
-            {
-                success: true,
-                message: 'Recado Cadastrado',
-                data: novoRecado
-            } as IResposta
-        )
-
+        } catch (error: any) {
+            HttpHelper.serverError(res, error)
+        }
     }
 
     async getById(req: Request, res: Response) {
-        const { id } = req.params
+        try {
+            const { id } = req.params
 
-        const repository = new RecadoRepository();
+            const usecase = new GetRecadoByIdUseCase(new RecadoRepository())
+            const result = await usecase.execute(id)
 
-        const resposta = await repository.getById(id);
+            HttpHelper.success(res, result, 'API - Recado Encontrado')
 
-        return res.json(resposta)
-
+        } catch (error: any) {
+            HttpHelper.serverError(res, error)
+        }
     }
 
     async getByUser(req: Request, res: Response) {

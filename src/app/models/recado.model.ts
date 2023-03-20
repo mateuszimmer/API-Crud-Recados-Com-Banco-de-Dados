@@ -1,19 +1,19 @@
 import { v4 as uuid } from 'uuid'
 
 export class Recado {
-    private id: string;
-    private titulo: string;
-    private descricao: string;
-    private data: string;
-    private usuario: string;
-    private arquivado: boolean;
+    public id: string;
+    public titulo: string;
+    public descricao: string;
+    public data: string;
+    public usuario: string;
+    public arquivado: boolean;
 
     private constructor(
         titulo: string,
         descricao: string,
         data: string,
         usuario: string,
-        arquivado: boolean,
+        arquivado?: boolean | undefined,
         id?: string
         ) {
             this.id = id ?? uuid()
@@ -21,11 +21,11 @@ export class Recado {
             this.descricao = descricao
             this.data = data
             this.usuario = usuario
-            this.arquivado = arquivado
+            this.arquivado = arquivado ?? false
         }
 
     public static create(
-        titulo: string, descricao: string, data: string, usuario: string, arquivado: boolean, id?: string
+        titulo: string, descricao: string, data: string, usuario: string, arquivado?: boolean, id?: string
     ) {
         return new Recado(titulo, descricao, data, usuario, arquivado, id);
     }

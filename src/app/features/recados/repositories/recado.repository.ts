@@ -1,14 +1,15 @@
 import { DeleteResult, ILike } from "typeorm"
+import { Recado } from "../../../models/recado.model";
 import { RecadoEntity } from "../../../shared/entities/recado.entity"
 
 export class RecadoRepository {
-    async create(titulo: string, descricao: string, data: string, usuario: string): Promise<RecadoEntity> {
+    async create(recado: Recado) {
         const novoRecado = RecadoEntity.create(
             {
-                titulo,
-                descricao,
-                data,
-                usuario
+                titulo: recado.titulo,
+                descricao: recado.descricao,
+                data: recado.data,
+                usuario: recado.usuario
             }
         );
 

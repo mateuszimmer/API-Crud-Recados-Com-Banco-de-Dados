@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
-import { IResposta } from "../../../shared/interfaces/IResposta";
 import { UsuarioRepository } from "../repositories/usuario.repository";
-import { UsuarioLogadoRepository } from "../../usuario-logado/repositories/usuarioLogado.repository";
 import { CreateUsuarioUseCase } from "../usecases/create-usuario.usecase";
 import { HttpHelper } from "../../../shared/util/http.helper";
 import { LogarUsuario } from "../usecases/login.usecase";
