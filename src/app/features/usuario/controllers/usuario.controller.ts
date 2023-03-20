@@ -5,6 +5,7 @@ import { UsuarioLogadoRepository } from "../../usuario-logado/repositories/usuar
 import { CreateUsuarioUseCase } from "../usecases/create-usuario.usecase";
 import { HttpHelper } from "../../../shared/util/http.helper";
 import { LogarUsuario } from "../usecases/login.usecase";
+import { ListarUsuariosUseCase } from "../usecases/listar-usuario.usecase";
 
 export class UsuarioController {
 
@@ -25,17 +26,20 @@ export class UsuarioController {
             const usecase = new LogarUsuario(new UsuarioRepository());
             const resultado = await usecase.execute(req.body)
 
-        } catch (error: any) {
+            if (!resultado) return HttpHelper.reqError(res, 'Usuario não encontrado', 404)
 
+            HttpHelper.success(res, resultado, 'API - Autorizado', 202)
+
+        } catch (error: any) {
+            HttpHelper.serverError(res, error)
         }
     }
 
     async getAll(req: Request, res: Response) {
         const { senha } = req.params
 
-        const repository = new UsuarioRepository();
-
-        const resposta = await repository.getAll(senha)
+        const usecase = new ListarUsuariosUseCase(new UsuarioRepository())
+        const resposta = await usecase.list(senha)
 
         res.json(resposta)
     }

@@ -1,36 +1,23 @@
 import { Usuario } from "../../../models/usuario.model";
+import { UsuarioLogadoRepository } from "../../usuario-logado/repositories/usuarioLogado.repository";
+import { CriaUsuarioLogadoUseCase } from "../../usuario-logado/usecases/criar-usuario-logado.usecase";
 import { UsuarioRepository } from "../repositories/usuario.repository";
 
 
 export class LogarUsuario {
     constructor( private _repository: UsuarioRepository ) {}
 
-    public async execute( usuario: Usuario ){
+    public async execute( usuario: Usuario ) {
 
         const resposta = await this._repository.getByEmail(usuario.email, usuario.senha)
         
-        if (resposta){
-            const repositoryLogado = new UsuarioLogadoRepository();
-            const token = (await repositoryLogado.setLogado(email)).idTemporario
+        console.log(resposta)
 
-            return res.status(200).json(
-                {
-                    success: true,
-                    message: 'API - Autorizado',
-                    data: token
-                } as IResposta
-            )
+        if (resposta){
+            const token = await new CriaUsuarioLogadoUseCase(new UsuarioLogadoRepository()).setNovoUsuarioLogado(resposta)
+            return token
         }
 
-        return res.status(404).json(
-            {
-                success: false,
-                message: 'Não autorizado',
-                data: null
-            } as IResposta
-        )
-
-
-
+        return null
     }
 }

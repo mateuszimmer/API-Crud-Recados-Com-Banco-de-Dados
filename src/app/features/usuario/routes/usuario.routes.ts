@@ -6,20 +6,17 @@ import { verificaExisteUsuario } from "../validator/verifica-existe-usuario.vali
 
 const usuarioRoutes = Router()
 
-usuarioRoutes.post(
-    '/novo', 
+usuarioRoutes.post('/novo', 
     [ checkSenhaResenha, checkEmailESenha, verificaExisteUsuario ], 
     new UsuarioController().criate,
 )
 
-usuarioRoutes.post(
-    '/logar', 
+usuarioRoutes.post('/logar', 
     [ checkEmailESenha ],  
     new UsuarioController().logarUser,
 )
 
-usuarioRoutes.get(
-    '/:senha', 
+usuarioRoutes.get('/list/:senha', 
     new UsuarioController().getAll
 )
 

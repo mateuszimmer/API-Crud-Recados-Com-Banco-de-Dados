@@ -30,14 +30,16 @@ export class UsuarioRepository {
         return Usuario.criate(user.email, user.senha)
     }
 
-    async getByEmail(email: string, senha: string): Promise<UsuarioEntity | null> {
+    async getByEmail(email: string, senha: string): Promise<Usuario | null> {
         const search = await UsuarioEntity.findOne({
             where: {
                 email, senha
             }
         });
 
-        return search;
+        if (!search) return null
+
+        return this.toModelUsuario(search);
     }
 
     async getAll(senha: string): Promise<UsuarioEntity[] | null> {
