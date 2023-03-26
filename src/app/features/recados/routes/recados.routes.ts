@@ -24,7 +24,7 @@ recadoRoutes.put('/:id',
     [checkCamposRecados, checkLogado],
     new RecadosController().update
 )
-recadoRoutes.delete('/delete/:token', 
+recadoRoutes.delete('/:token', 
     [checkLogado],
     new RecadosController().delete
 )

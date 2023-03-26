@@ -56,10 +56,10 @@ export class RecadoRepository {
         const recado = await this.getById(novoRecado.id, novoRecado.usuario);
         if(!recado) return null;
 
-        recado.titulo = novoRecado.titulo!;
-        recado.descricao = novoRecado.descricao!;
-        recado.data = novoRecado.data!;
-        recado.arquivado = novoRecado.arquivado!;
+        recado.titulo = novoRecado.titulo ? novoRecado.titulo : recado.titulo;
+        recado.descricao = novoRecado.descricao ? novoRecado.descricao : recado.descricao;
+        recado.data = novoRecado.data ? novoRecado.data : recado.data;
+        recado.arquivado = novoRecado.arquivado ? novoRecado.arquivado : recado.arquivado;
 
         const retorno = await recado.save();
         
