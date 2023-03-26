@@ -6,6 +6,10 @@ import { UsuarioLogadoRepository } from "../../usuario-logado/repositories/usuar
 import { CriarRecadoUseCase } from "../usecases/create-recado.usecase";
 import { HttpHelper } from "../../../shared/util/http.helper";
 import { GetRecadoByIdUseCase } from "../usecases/get-recado-id.usecase";
+import { GetRecadoByUserUseCase } from "../usecases/get-by-user.usercase";
+import { UpdateRecadoUsecase } from "../usecases/update-recado-usecase";
+import { UsuarioRepository } from "../../usuario/repositories/usuario.repository";
+import { DeletarRecadoUseCase } from "../usecases/delete-recado.usecase";
 
 export class RecadosController {
     async create(req: Request, res: Response) {
@@ -40,148 +44,46 @@ export class RecadosController {
         }
     }
 
-    async getByUser(req: Request, res: Response) {
-        const { token } = req.params
-        const arquivado = req.query.arquivado
-        const titulo = req.query.titulo
-        
-        const tituloString = titulo?.toString()
+    async getByUser (req: Request, res: Response) {
+        try {
+            const arquivado = req.query.arquivado
+            const titulo = req.query.titulo
+            
+            const tituloString = titulo?.toString()
+            const arq = arquivado==="1"? true: false
 
-        const arq = arquivado==="1"? true: false
+            const usecase = new GetRecadoByUserUseCase(new RecadoRepository());
+            const resposta = await usecase.execute(req.body['usuario'], tituloString, arq)
 
-        
-        const repLogado = new UsuarioLogadoRepository()
-        const emailLogado = await repLogado.usuarioLogado(token)
-
-        if (!emailLogado) return res.status(401).json(
-            {
-                success: false,
-                message: "Usuario não logado",
-                data: null
-            } as IResposta
-        )
-
-        const repository = new RecadoRepository();
-
-        const resposta = await repository.getByUser(emailLogado, arq, tituloString)
-
-        const repostaMapeada = resposta.map(recado => {
-            const novadata = new Date(recado.data)
-            return({
-                id: recado.id,
-                titulo: recado.titulo,
-                data: novadata.toISOString().slice(0, 10),
-                usuario: token,
-                descricao: recado.descricao,
-                arquivado: recado.arquivado,
-                createdAt: recado.createdAt,
-                updatedAt: recado.updatedAt
-            } as IRecado)
-        })
-
-        return res.json({   
-            success: true,
-            message: 'Recados',
-            data: repostaMapeada
-        })
+            return HttpHelper.success(res, resposta, 'API - Recados Localizados')
+            
+        } catch (error: any) {
+            return HttpHelper.serverError(res, error)
+        }
     }
 
     async update(req: Request, res: Response) {
         const { id } = req.params
-        const { titulo, descricao, data, token, arquivado } = req.body
 
+        const usecase = new UpdateRecadoUsecase(new RecadoRepository())
+        const resposta = await usecase.execute(id, req.body)
 
-        if(!titulo || !descricao || !data || !token ) {
-            return res.status(400).json(
-                {
-                    success: false,
-                    message: 'Todas as informações devem ser preenchidas',
-                    data: null
-                } as IResposta
-            )}
-            
-        const repLogado = new UsuarioLogadoRepository()
-        const emailLogado = await repLogado.usuarioLogado(token)
-        
-        if (!emailLogado) return res.status(401).json(
-            {
-                success: false,
-                message: "Usuario não logado",
-                data: null
-            } as IResposta
-        )
-
-        const repository = new RecadoRepository()
-        const novoRecado = await repository.update(id, titulo, descricao, data, emailLogado, arquivado)
-
-        if(!novoRecado) {
-            return res.status(400).json(
-                {
-                    success: false,
-                    message: 'Não foi possível alterar o recado informado. Erro nas informações',
-                    data: null
-                } as IResposta
-            )
+        if(!resposta) {
+            return HttpHelper.reqError(res, 'Não foi possível alterar o recado informado. Erro nas informações')
         }
 
-        return res.status(200).json(
-            {
-                success: true,
-                message: 'Recado Cadastrado',
-                data: {
-                    id: novoRecado.id,
-                    titulo: novoRecado.titulo,
-                    descricao: novoRecado.descricao,
-                    data: novoRecado.data,
-                    arquivado: novoRecado.arquivado,
-                    createdAt: novoRecado.createdAt,
-                    updatedAt: novoRecado.updatedAt
-                }
-            } as IResposta
-        )
+        return HttpHelper.success(res, resposta, "Recado Alterado")
     }
 
     async delete(req: Request, res: Response) {
-        const { token } = req.params
+        const { usuario } = req.params
         const { recado } = req.query
 
-        const repLogado = new UsuarioLogadoRepository()
-        const emailLogado = await repLogado.usuarioLogado(token)
-
-        if (!emailLogado) return res.status(401).json(
-            {
-                success: false,
-                message: "Usuario não logado",
-                data: null
-            } as IResposta
-        )
-
         if(!recado) return ("ID do recado não informado")
-        
-        const repository = new RecadoRepository()
-    
-        const recadoEncontrado = await repository.getById(recado.toString(), emailLogado)
 
-        if(!recadoEncontrado) {
-            return res.status(400).json(
-                {
-                    success: false,
-                    message: "Recado não encontrado para o Usuário Logado",
-                    data: null
-                } as IResposta
-            )
-        }
-        
-        const resposta = await repository.delete(recado.toString(), emailLogado)
+        const usecase = new DeletarRecadoUseCase(new RecadoRepository())
+        const resposta = await usecase.execute(recado.toString(), usuario)
 
-        return res.status(200).json(
-            {
-                success: true,
-                message: "Recado excluído",
-                data: {
-                    recadoExcluido: recadoEncontrado
-                }
-            } as IResposta
-        )
+        return HttpHelper.success(res, resposta, 'API -Recado excluído com sucesso')
     }
 }

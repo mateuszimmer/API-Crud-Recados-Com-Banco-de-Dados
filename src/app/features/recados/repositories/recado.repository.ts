@@ -18,7 +18,7 @@ export class RecadoRepository {
         return resposta;
     }
 
-    async getById(id: string, usuario?: string): Promise<RecadoEntity | null> {
+    async getById(id: string | undefined, usuario?: string): Promise<RecadoEntity | null> {
 
         const pesquisa = await RecadoEntity.findOne({
             where: {
@@ -52,14 +52,14 @@ export class RecadoRepository {
 
     }
 
-    async update(id: string, titulo: string, descricao: string, data: string, usuario: string, arquivado: boolean): Promise<RecadoEntity | null>{
-        const recado = await this.getById(id, usuario);
+    async update(novoRecado: Partial<Recado>): Promise<RecadoEntity | null>{
+        const recado = await this.getById(novoRecado.id, novoRecado.usuario);
         if(!recado) return null;
 
-        recado.titulo = titulo;
-        recado.descricao = descricao;
-        recado.data = data;
-        recado.arquivado = arquivado;
+        recado.titulo = novoRecado.titulo!;
+        recado.descricao = novoRecado.descricao!;
+        recado.data = novoRecado.data!;
+        recado.arquivado = novoRecado.arquivado!;
 
         const retorno = await recado.save();
         

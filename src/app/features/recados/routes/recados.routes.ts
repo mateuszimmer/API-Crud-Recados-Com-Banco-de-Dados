@@ -15,8 +15,18 @@ recadoRoutes.get('/:id',
     new RecadosController().getById
 )
 
-// recadoRoutes.get('/usuario/:token/recados', recadoController.getByUser)
-// recadoRoutes.put('/recado/:id', recadoController.update)
-// recadoRoutes.delete('/recado/delete/:token', recadoController.delete)
+recadoRoutes.get('/listar/:token', 
+    [checkLogado],
+    new RecadosController().getByUser
+)
+
+recadoRoutes.put('/:id',
+    [checkCamposRecados, checkLogado],
+    new RecadosController().update
+)
+recadoRoutes.delete('/delete/:token', 
+    [checkLogado],
+    new RecadosController().delete
+)
 
 export { recadoRoutes }
