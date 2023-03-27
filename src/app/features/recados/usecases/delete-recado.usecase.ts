@@ -5,6 +5,6 @@ export class DeletarRecadoUseCase {
 
     public async execute(id: string, usuario: string) {
         const resposta = await this._repository.delete(id, usuario)
-        return
+        return resposta 
     }
 }

@@ -76,13 +76,15 @@ export class RecadosController {
     }
 
     async delete(req: Request, res: Response) {
-        const { usuario } = req.params
+        const { usuario } = req.body
         const { recado } = req.query
 
         if(!recado) return ("ID do recado não informado")
 
         const usecase = new DeletarRecadoUseCase(new RecadoRepository())
         const resposta = await usecase.execute(recado.toString(), usuario)
+
+        if(resposta?.affected === 0) return HttpHelper.reqError(res, 'Não foi possível deletar o recado')
 
         return HttpHelper.success(res, resposta, 'API -Recado excluído com sucesso')
     }
