@@ -50,7 +50,22 @@ export class RecadosController {
             const titulo = req.query.titulo
             
             const tituloString = titulo?.toString()
-            const arq = arquivado==="1"? true: false
+            let arq: boolean | undefined
+
+            console.log(arquivado)
+
+            switch(arquivado) {
+                case '0':
+                    arq = false
+                    break
+                case '1':
+                    arq = true
+                    break
+                default:
+                    arq = undefined
+                    break
+            }
+            
 
             const usecase = new GetRecadoByUserUseCase(new RecadoRepository());
             const resposta = await usecase.execute(req.body['usuario'], tituloString, arq)

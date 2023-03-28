@@ -31,25 +31,12 @@ export class RecadoRepository {
     }
 
     async getByUser(email: string, arquivado?: boolean, titulo?: string): Promise<RecadoEntity[]> {
-        if(titulo) {
-            const recados = await RecadoEntity.find({
-                where: {
-                    usuario: email,
-                    titulo: ILike(`%${titulo}%`),
-                    arquivado: (arquivado? true : false)
-                } 
-            });
-            return recados;
-        } else {
-            const recados = await RecadoEntity.find({
-                where: {
-                    usuario: email,
-                    arquivado: arquivado? true : false,
-                } 
-            });
-            return recados;
-        }
-
+        const recados = await RecadoEntity.find({
+            where: {
+                usuario: email,                } 
+        });
+        
+        return recados;
     }
 
     async update(novoRecado: Partial<Recado>): Promise<RecadoEntity | null>{
@@ -67,9 +54,6 @@ export class RecadoRepository {
     }
 
     async delete(id: string, usuario: string): Promise<void | null | DeleteResult>{
-
-        console.log("id: ", id)
-        console.log("usuario: ", usuario)
 
         const retorno = await RecadoEntity.delete({
             id,
