@@ -27,7 +27,7 @@ export class UpdateRecadoUsecase {
 
     private async saveToCache(recado: Recado) {
         const cache = new CacheRepository();
-        await cache.set(recado.id, recado);
+        await cache.setEX(recado.id, recado, 300);
 
         const lista = await cache.get(`RECADOS_USER_${recado.usuario}`) || [];
 
@@ -35,7 +35,7 @@ export class UpdateRecadoUsecase {
 
         if(indice >= 0) {
             lista[indice] = recado;
-            await cache.set(`RECADOS_USER_${recado.usuario}`, lista);
+            await cache.setEX(`RECADOS_USER_${recado.usuario}`, lista, 300);
         }
     }
 }

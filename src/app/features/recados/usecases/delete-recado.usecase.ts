@@ -19,6 +19,6 @@ export class DeletarRecadoUseCase {
 
         const retorno = lista.filter((rec: RecadoEntity) => rec.id !== id);
         
-        await cache.set(`RECADOS_USER_${usuario}`, retorno);
+        await cache.setEX(`RECADOS_USER_${usuario}`, retorno, 300);
     }
 }

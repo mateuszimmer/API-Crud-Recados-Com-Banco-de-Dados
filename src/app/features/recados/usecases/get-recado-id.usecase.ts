@@ -7,11 +7,21 @@ export class GetRecadoByIdUseCase {
     constructor(private _repository: RecadoRepository) {}
 
     public async execute(id: string) {
-        const resposta = await this._repository.getById(id);
+        
+        const cache = await this.getFromCache(id)
+        
+        if(cache) return cache
 
+        const resposta = await this._repository.getById(id);
         if(resposta) this.saveToCache(resposta)
 
         return resposta
+    }
+
+    private async getFromCache(key: string) {
+        const cache = new CacheRepository();
+        const recado = cache.get(key)
+        return recado
     }
 
     private async saveToCache(recado: Recado) {
@@ -24,7 +34,7 @@ export class GetRecadoByIdUseCase {
         
         if(indice >= 0) {
             lista[indice] = recado;
-            await cache.set(`RECADOS_USER_${recado.usuario}`, lista);
+            await cache.setEX(`RECADOS_USER_${recado.usuario}`, lista, 300);
         }
     }
 }
