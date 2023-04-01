@@ -30,15 +30,24 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
     "dev:debug": "ts-node-dev --inspect=0.0.0.0:9229 --respawn --transpile-only src/index.ts",
-    "test": "jest --silent --noStackTrace --runInBand",
-    "test:coverage": "jest --runInBand --coverage",
+
     "build": "rimraf dist && tsc",
     "ts.check": "tsc --project tsconfig.json",
     "start": "node dist/index.js",
+
     "migration:create": "typeorm migration:create src/database/migrations/CreateTable",
     "migration:show": "typeorm-ts-node-commonjs migration:show -d src/database/typeorm.ts",
     "migration:run": "typeorm-ts-node-commonjs migration:run -d src/database/typeorm.ts",
-    "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/database/typeorm.ts"
+    "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/database/typeorm.ts",
+
+    "test": "jest --silent --noStackTrace --runInBand",
+    "test:coverage": "jest --runInBand --coverage",
+    "test:verbose": "jest --verbose --runInBand --detectOpenHandles",
+    "test:watch": "jest --silent --noStackTrace --runInBand --watchAll",
+    "test:unit": "jest -c jest.unit.config.ts --silent --noStackTrace --runInBand",
+    "test:unit:verbose": "jest -c jest.unit.config.ts --verbose --runInBand --detectOpenHandles",
+    "test:unit:coverage": "jest -c jest.unit.config.ts --silent --noStackTrace --runInBand --coverage",
+    "test:unit:watch": "jest -c jest.unit.config.ts --silent --noStackTrace --runInBand --watchAll"
   },
   "keywords": [],
   "author": "",
