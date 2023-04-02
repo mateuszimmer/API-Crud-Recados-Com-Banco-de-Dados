@@ -7,7 +7,6 @@ export class GetRecadoByUserUseCase {
     constructor( private _repository: RecadoRepository) {}
 
     public async execute(email: string, titulo?: string, arquivado?: boolean) {
-        console.log('requisição de todos os recados')
         let dadosCache = await this.getRecadosCache(email);
 
         if(!dadosCache) {
@@ -15,8 +14,6 @@ export class GetRecadoByUserUseCase {
             await this.saveRecadosCache(dadosCache)
         };
 
-        // filtros
-        // console.log(arquivado)
         dadosCache = dadosCache.filter((recado: Recado) => recado.titulo.toLowerCase().includes(titulo?.toLowerCase() ?? ''));
         if(arquivado !== undefined) dadosCache = dadosCache.filter((recado: Recado) => recado.arquivado === arquivado);
 

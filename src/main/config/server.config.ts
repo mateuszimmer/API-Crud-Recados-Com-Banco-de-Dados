@@ -1,5 +1,5 @@
 import express from 'express'
-import { makeRoutes } from '../server/routes.server'
+import { makeRoutes } from '../server/express.routes'
 import cors from 'cors'
 
 export const createServer = () => {

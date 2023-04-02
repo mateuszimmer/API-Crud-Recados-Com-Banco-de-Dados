@@ -14,7 +14,7 @@ export class UsuarioLogadoRepository {
     }
 
     async usuarioLogado(id: string): Promise<string | null> {
-        
+
         const resposta = await UsuarioLogadoEntity.findOne({
             where: {
                 idTemporario: id

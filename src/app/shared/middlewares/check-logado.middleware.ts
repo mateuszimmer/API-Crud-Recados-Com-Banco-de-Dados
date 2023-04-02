@@ -10,6 +10,8 @@ export const checkLogado = async (req: Request, res: Response, next: NextFunctio
         usuario = token
     }
 
+    if(!usuario) return HttpHelper.reqError(res, 'API - Não foi possível identificar usuário logado.')
+
     const repLogado = new UsuarioLogadoRepository()
     const emailLogado = await repLogado.usuarioLogado(usuario)
     

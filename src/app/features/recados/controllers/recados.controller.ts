@@ -52,8 +52,6 @@ export class RecadosController {
             const tituloString = titulo?.toString()
             let arq: boolean | undefined
 
-            console.log(arquivado)
-
             switch(arquivado) {
                 case '0':
                     arq = false
@@ -66,7 +64,6 @@ export class RecadosController {
                     break
             }
             
-
             const usecase = new GetRecadoByUserUseCase(new RecadoRepository());
             const resposta = await usecase.execute(req.body['usuario'], tituloString, arq)
 
@@ -78,29 +75,38 @@ export class RecadosController {
     }
 
     async update(req: Request, res: Response) {
-        const { id } = req.params
+        try{
+            const { id } = req.params
 
-        const usecase = new UpdateRecadoUsecase(new RecadoRepository())
-        const resposta = await usecase.execute(id, req.body)
+            const usecase = new UpdateRecadoUsecase(new RecadoRepository())
+            const resposta = await usecase.execute(id, req.body)
 
-        if(!resposta) {
-            return HttpHelper.reqError(res, 'Não foi possível alterar o recado informado. Erro nas informações')
+            if(!resposta) {
+                return HttpHelper.reqError(res, 'Não foi possível alterar o recado informado. Erro nas informações')
+            }
+
+            return HttpHelper.success(res, resposta, "Recado Alterado")
+        } catch (error: any) {
+            return HttpHelper.serverError(res, error)
         }
-
-        return HttpHelper.success(res, resposta, "Recado Alterado")
     }
 
     async delete(req: Request, res: Response) {
-        const { usuario } = req.body
-        const { recado } = req.query
+        try{
+            const { usuario } = req.body
+            const { recado } = req.query
 
-        if(!recado) return ("ID do recado não informado")
+            if(!recado) return ("ID do recado não informado")
 
-        const usecase = new DeletarRecadoUseCase(new RecadoRepository())
-        const resposta = await usecase.execute(recado.toString(), usuario)
+            const usecase = new DeletarRecadoUseCase(new RecadoRepository())
+            const resposta = await usecase.execute(recado.toString(), usuario)
 
-        if(resposta?.affected === 0) return HttpHelper.reqError(res, 'Não foi possível deletar o recado')
+            if(resposta?.affected === 0) return HttpHelper.reqError(res, 'Não foi possível deletar o recado')
 
-        return HttpHelper.success(res, resposta, 'API -Recado excluído com sucesso')
+            return HttpHelper.success(res, resposta, 'API -Recado excluído com sucesso')
+
+        } catch (error: any) {
+            return HttpHelper.serverError(res, error)
+        }
     }
 }

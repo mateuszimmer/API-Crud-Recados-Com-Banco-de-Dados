@@ -55,10 +55,9 @@ export class RecadoRepository {
 
     async delete(id: string, usuario: string): Promise<void | null | DeleteResult>{
 
-        const retorno = await RecadoEntity.delete({
-            id,
-            usuario
-        });
+        const retorno = await RecadoEntity.delete({id: id, usuario: usuario})
+
+        // console.log(usuario)
         return retorno;
     }
 }
