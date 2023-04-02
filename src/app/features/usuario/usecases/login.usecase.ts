@@ -10,8 +10,6 @@ export class LogarUsuario {
     public async execute( usuario: Usuario ) {
 
         const resposta = await this._repository.getByEmail(usuario.email, usuario.senha)
-        
-        console.log(resposta)
 
         if (resposta){
             const token = await new CriaUsuarioLogadoUseCase(new UsuarioLogadoRepository()).setNovoUsuarioLogado(resposta)

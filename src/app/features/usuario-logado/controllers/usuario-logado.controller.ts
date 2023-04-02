@@ -1,40 +1,28 @@
 import { Request, Response } from "express";
 import { IResposta } from "../../../shared/interfaces/IResposta";
 import { UsuarioLogadoRepository } from "../repositories/usuarioLogado.repository";
+import { ObterUsuarioLogadoPorIdUseCase } from "../usecases/obter-usuario-logado-por-id.usecase";
+import { HttpHelper } from "../../../shared/util/http.helper";
+import { ExcluirUsuarioLogadoUseCase } from "../usecases/excluir-usuario-logado.usecase";
 
 export class UsuarioLogadoController {
     async getUserLoggedById (req: Request, res: Response) {
         const { token } = req.params
 
-        const repository = new UsuarioLogadoRepository();
+        const usecase = new ObterUsuarioLogadoPorIdUseCase(new UsuarioLogadoRepository)
+        const resposta =  await usecase.execute(token)
 
-        const resposta =  await repository.usuarioLogado(token)
-
-        if(!resposta) return res.status(404).json({
-            success: false,
-            message: 'Não há usuario logado',
-            data: null
-        } as IResposta)
-
-        return res.status(200).json({
-            success: true,
-            message: 'Autorizado',
-            data: token
-        } as IResposta)
-
+        if(!resposta) return HttpHelper.reqError(res, 'Não há usuario logado', 404);
+        return HttpHelper.success(res, resposta, 'Autorizado', 200);
     }
 
     async logoutUser (req: Request, res: Response) {
         const { token } = req.params
 
-        const repository = new UsuarioLogadoRepository();
+        const usecase = new ExcluirUsuarioLogadoUseCase(new UsuarioLogadoRepository);
+        const resposta  = await usecase.execute(token);
 
-        await repository.deleteLogado(token)
-
-        return res.status(200).json({
-            success: true,
-            message: 'Deslogado',
-            data: null
-        } as IResposta)
+        if (!resposta) return HttpHelper.reqError(res, 'Não foi excluido nenhum usuario logado');
+        return HttpHelper.success(res, null, 'Deslogado', 200)
     }
 }
