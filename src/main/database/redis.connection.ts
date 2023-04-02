@@ -22,4 +22,17 @@ export class RedisConnection {
 
     return this._connection;
   }
+
+  public static async disconnect() {
+    if (!this._connection) {
+      throw new Error("Redis não conectado")
+    }
+
+    console.log('Encerrando conexão com Redis...')
+
+    await this._connection.quit();
+
+    console.log('Conexão com Redis Encerrada.')
+
+  }
 }

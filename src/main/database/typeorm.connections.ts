@@ -20,4 +20,16 @@ export class DatabaseConnection {
         
         return this._connection;
     }
+
+    public static async destroy() {
+        if(!this._connection) {
+            throw new Error("O Banco de Dados não está iniciado.");
+        };
+
+        console.log('Encerrando conexão...');
+
+        await this._connection.destroy();
+
+        console.log('Conexão com o banco de dados encerrada.')
+    }
 }
