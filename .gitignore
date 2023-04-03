@@ -1,6 +1,6 @@
-/node_modules/
+node_modules/
 *lock*
 .env
 *.http
-coverage
-*.sqlite3
+coverage/
+database.sqlite3

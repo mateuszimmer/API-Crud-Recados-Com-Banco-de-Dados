@@ -17,16 +17,16 @@ export class RedisConnection {
 
   public static get connection() {
     if (!this._connection) {
-      throw new Error("Redis nao conectado");
+      throw new Error("Redis nao conectado :/");
     }
     return this._connection;
   }
 
-  public static async disconnect() {
-    if (!this._connection) {
-      throw new Error("Redis não conectado")
-    }
+  public static async destroy() {
+      if (!this._connection) {
+        throw new Error("Redis não conectado")
+      }
 
-    await this._connection.quit();
+      await this._connection.quit();
   }
 }

@@ -2,10 +2,7 @@ import { DatabaseConnection } from '../../../../../src/main/database/typeorm.con
 import { RedisConnection } from '../../../../../src/main/database/redis.connection';
 import { RecadoRepository } from '../../../../../src/app/features/recados/repositories/recado.repository';
 import { CriarRecadoUseCase } from '../../../../../src/app/features/recados/usecases/create-recado.usecase';
-import { CacheRepository } from '../../../../../src/app/shared/database/repositories/cache.repository';
 import { RecadoEntity } from '../../../../../src/app/shared/entities/recado.entity';
-import { Recado } from '../../../../../src/app/models/recado.model';
-import { isDate } from 'util/types';
 
 describe('Crisar um recado', () => {
     beforeAll(async () => {
@@ -15,7 +12,7 @@ describe('Crisar um recado', () => {
 
     afterAll(async () => {
         await DatabaseConnection.destroy();
-        // await RedisConnection.disconnect();
+        await RedisConnection.destroy();
     });
 
     beforeEach(() => {
