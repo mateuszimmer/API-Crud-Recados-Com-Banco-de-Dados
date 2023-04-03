@@ -5,13 +5,13 @@ export class RedisConnection {
   private static _connection: Redis;
 
   public static async connect(): Promise<void> {
-    if (!this._connection) {
+    if (!this._connection)  {
       this._connection = new Redis({
         host: redisEnv.host,
         port: redisEnv.port,
         username: redisEnv.username,
         password: redisEnv.password,
-      });
+      })
     }
   }
 
@@ -19,7 +19,6 @@ export class RedisConnection {
     if (!this._connection) {
       throw new Error("Redis nao conectado");
     }
-
     return this._connection;
   }
 
@@ -28,11 +27,6 @@ export class RedisConnection {
       throw new Error("Redis não conectado")
     }
 
-    console.log('Encerrando conexão com Redis...')
-
     await this._connection.quit();
-
-    console.log('Conexão com Redis Encerrada.')
-
   }
 }

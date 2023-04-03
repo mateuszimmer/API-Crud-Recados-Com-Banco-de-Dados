@@ -28,7 +28,7 @@ export class RecadoEntity extends BaseEntity{
     createdAt!: Date;
 
     @UpdateDateColumn({ name: 'updated_at' })
-    updatedAt?: Date;
+    updatedAt?: Date | null | undefined;
 
     @ManyToOne(() => UsuarioEntity, fk => fk.recados)
     @JoinColumn({ name: 'email_usuario', referencedColumnName: 'email' })

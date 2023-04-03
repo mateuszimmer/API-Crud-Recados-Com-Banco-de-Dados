@@ -8,23 +8,23 @@ export class CriarRecadoUseCase {
     constructor( private _repository: RecadoRepository) {}
 
     public async execute (recado: Recado) {
-        const novoRecado = Recado.create(recado.titulo, recado.descricao, recado.data, recado.usuario)
-        const result = await this._repository.create(novoRecado)
+        const novoRecado = Recado.create(recado.titulo, recado.descricao, recado.data, recado.usuario);
+        const result = await this._repository.create(novoRecado);
 
-        this.saveToCache(result)
+        this.saveToCache(result);
 
-        return this.toModelRecado(result)
+        return this.toModelRecado(result);
     }
 
     private async saveToCache(recado: Recado) {
-        const cache = new CacheRepository()
+        const cache = new CacheRepository();
         
-        await cache.setEX(recado.id, recado, 300)
+        await cache.setEX(recado.id, recado, 300);
 
         const lista = await cache.get(`RECADOS_USER_${recado.usuario}`) || [];
-        lista.push(recado)
-        await cache.setEX(`RECADOS_USER_${recado.usuario}`, lista, 300)
-        return
+        lista.push(recado);
+        await cache.setEX(`RECADOS_USER_${recado.usuario}`, lista, 300);
+        return;
     }
 
     public toModelRecado (recado: RecadoEntity) {
@@ -35,6 +35,6 @@ export class CriarRecadoUseCase {
                 recado.usuario,
                 recado.arquivado,
                 recado.id
-        )
-    }
-}
+        );
+    };
+};

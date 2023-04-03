@@ -8,19 +8,37 @@ import { CreateTableUsuario1677495888053 } from "../../app/shared/migrations/167
 import { CreateTableRecados1677508413621 } from "../../app/shared/migrations/1677508413621-CreateTableRecados";
 import { CreateTableUsuariosLogados1677510544482 } from "../../app/shared/migrations/1677510544482-CreateTableUsuariosLogados";
 
-export default new DataSource ({
+
+const minhasMigrations = [
+  CreateTableRecados1677508413621, 
+  CreateTableUsuario1677495888053, 
+  CreateTableUsuariosLogados1677510544482
+]
+
+const minhasEntities =[
+  RecadoEntity, 
+  UsuarioEntity, 
+  UsuarioLogadoEntity
+]
+
+let dataSource = new DataSource ({
   type: "postgres",
   url: typeormEnv.url,
   synchronize: false,
   logging: false,
-  entities: [
-    RecadoEntity, 
-    UsuarioEntity, 
-    UsuarioLogadoEntity
-  ],
-  migrations: [
-    CreateTableRecados1677508413621, 
-    CreateTableUsuario1677495888053, 
-    CreateTableUsuariosLogados1677510544482
-  ],
+  entities: minhasEntities,
+  migrations: minhasMigrations,
 });
+
+if (process.env.NODE_ENV == 'test') {
+  dataSource = new DataSource ({
+    type: "sqlite",
+    database: 'database.sqlite3',
+    synchronize: false,
+    logging: false,
+    entities: minhasEntities,
+    migrations: minhasMigrations,
+  });
+};
+
+export default dataSource;
