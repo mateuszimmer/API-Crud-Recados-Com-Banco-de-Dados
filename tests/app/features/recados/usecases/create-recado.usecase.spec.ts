@@ -4,7 +4,7 @@ import { RecadoRepository } from '../../../../../src/app/features/recados/reposi
 import { CriarRecadoUseCase } from '../../../../../src/app/features/recados/usecases/create-recado.usecase';
 import { RecadoEntity } from '../../../../../src/app/shared/entities/recado.entity';
 
-describe('Crisar um recado', () => {
+describe('Criar um recado', () => {
     beforeAll(async () => {
         await DatabaseConnection.connect();
         await RedisConnection.connect();
@@ -64,5 +64,4 @@ describe('Crisar um recado', () => {
         expect(result.usuario).toBe('teste@teste.com');
         expect(result.arquivado).toBe(false);
     })
-
 });
