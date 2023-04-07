@@ -27,6 +27,10 @@ export class RedisConnection {
         throw new Error("Redis não conectado")
       }
 
-      await this._connection.quit();
+      try {
+        this._connection.quit();
+      } catch {
+        throw new Error("Não foi possível encerrar a conexão")
+      }
   }
 }

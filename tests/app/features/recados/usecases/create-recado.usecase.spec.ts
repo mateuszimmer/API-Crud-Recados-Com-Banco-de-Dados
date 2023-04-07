@@ -3,17 +3,31 @@ import { RedisConnection } from '../../../../../src/main/database/redis.connecti
 import { RecadoRepository } from '../../../../../src/app/features/recados/repositories/recado.repository';
 import { CriarRecadoUseCase } from '../../../../../src/app/features/recados/usecases/create-recado.usecase';
 import { RecadoEntity } from '../../../../../src/app/shared/entities/recado.entity';
+import { CacheRepository } from '../../../../../src/app/shared/database/repositories/cache.repository';
+
+beforeAll(async () => {
+    try{
+        await DatabaseConnection.connect();
+    } catch (error) {
+        throw new Error("não foi possível desconectar o banco de dados")
+    }
+
+    try{
+        await RedisConnection.connect();
+    } catch (error) {
+        throw new Error("não foi possível desconectar o redis")
+    }
+
+    return
+});
+
+afterAll(async () => {
+    await DatabaseConnection.destroy();
+    await RedisConnection.destroy();
+});
 
 describe('Criar um recado', () => {
-    beforeAll(async () => {
-        await DatabaseConnection.connect();
-        await RedisConnection.connect();
-    });
 
-    afterAll(async () => {
-        await DatabaseConnection.destroy();
-        await RedisConnection.destroy();
-    });
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -31,6 +45,9 @@ describe('Criar um recado', () => {
 
     test("Deveria retornar um Recado(model) quando inseridas as informações de titulo, descrição, data e usuario", async () => {
         const { sut } = makeSut()
+
+        jest.spyOn(CacheRepository.prototype, 'get').mockResolvedValue(null)
+        jest.spyOn(CacheRepository.prototype, 'setEX').mockResolvedValue()
         
         jest.spyOn(RecadoRepository.prototype, 'create').mockResolvedValue({
             titulo: "Titulo do Recado",

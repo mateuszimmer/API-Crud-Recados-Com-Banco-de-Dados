@@ -4,21 +4,22 @@ import { DatabaseConnection } from "../../../../../src/main/database/typeorm.con
 import { DeletarRecadoUseCase } from '../../../../../src/app/features/recados/usecases/delete-recado.usecase';
 import { CacheRepository } from "../../../../../src/app/shared/database/repositories/cache.repository";
 
+beforeAll(async () => {
+    await DatabaseConnection.connect();
+    await RedisConnection.connect();
+});
+
+afterAll(async () => {
+    await DatabaseConnection.destroy();
+    await RedisConnection.destroy();
+});
+
 describe('Testes DeletarRecadoUseCase', () => {
-
-    beforeAll(async () => {
-        await DatabaseConnection.connect();
-        await RedisConnection.connect();
-    });
-
-    afterAll(async () => {
-        await DatabaseConnection.destroy();
-        await RedisConnection.destroy();
-    });
 
     beforeEach(() => {
         jest.clearAllMocks();
     });
+
 
     const makeSut = () => {
         const repository = new RecadoRepository();
@@ -36,6 +37,8 @@ describe('Testes DeletarRecadoUseCase', () => {
         const usuario = "id-válido";
         
         jest.spyOn(RecadoRepository.prototype, 'delete').mockResolvedValue();
+        jest.spyOn(CacheRepository.prototype, 'get').mockResolvedValue(null)
+        jest.spyOn(CacheRepository.prototype, 'setEX').mockResolvedValue()
 
         await sut.execute(id, usuario)
 
@@ -49,6 +52,8 @@ describe('Testes DeletarRecadoUseCase', () => {
         const { sut } = makeSut();
 
         jest.spyOn(RecadoRepository.prototype, 'delete').mockResolvedValue({ raw: [], affected: 0 });
+        jest.spyOn(CacheRepository.prototype, 'get').mockResolvedValue(null)
+        jest.spyOn(CacheRepository.prototype, 'setEX').mockResolvedValue()
 
         const resposta = await sut.execute(idInvalido, usuario)
 
@@ -61,10 +66,14 @@ describe('Testes DeletarRecadoUseCase', () => {
         const { sut } = makeSut();
     
         jest.spyOn(RecadoRepository.prototype, 'delete').mockResolvedValue({ raw: [], affected: 1 })
+        jest.spyOn(CacheRepository.prototype, 'get').mockResolvedValue(null)
+        jest.spyOn(CacheRepository.prototype, 'setEX').mockResolvedValue()
 
         const resposta = await sut.execute(id, usuario)
 
         expect(resposta?.affected).toBe(1)        
     })
 
-})
+});
+
+

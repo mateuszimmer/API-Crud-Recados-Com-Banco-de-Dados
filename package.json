@@ -41,7 +41,7 @@
     "migration:run": "typeorm-ts-node-commonjs migration:run -d src/database/typeorm.ts",
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/database/typeorm.ts",
     "migration:run:test": "cross-env NODE_ENV=test typeorm-ts-node-commonjs migration:run -d src/main/config/database.config.ts",
-    "test": "jest --silent --noStackTrace --runInBand",
+    "test": "jest --runInBand --silent --noStackTrace",
     "test:coverage": "jest --runInBand --coverage",
     "test:verbose": "jest --verbose --runInBand --detectOpenHandles",
     "test:watch": "jest --silent --noStackTrace --runInBand --watchAll",
