@@ -28,26 +28,6 @@ describe('Teste get-recado-id.usecase', () => {
                 createdAt: new Date("2023-04-02T04:32:38.054Z"),
                 updatedAt: null
             } as any,
-            // {
-            //     id: "id02",
-            //     titulo: "Recado 2",
-            //     descricao: "Descricao 2",
-            //     data: "2023-03-15T03:00:00.000Z",
-            //     usuario: "teste@teste.com",
-            //     arquivado: false,
-            //     createdAt: new Date("2023-04-02T04:32:38.054Z"),
-            //     updatedAt: null
-            // } as any,
-            // {
-            //     id: "id020",
-            //     titulo: "Recado 20",
-            //     descricao: "Descricao 20",
-            //     data: "2023-03-15T03:00:00.000Z",
-            //     usuario: "teste@teste.com",
-            //     arquivado: true,
-            //     createdAt: new Date("2023-04-02T04:32:38.054Z"),
-            //     updatedAt: null
-            // } as any
         )
 
     });
@@ -167,7 +147,6 @@ describe('Teste get-recado-id.usecase', () => {
 
         const resposta = await sut.execute('id01')
 
-        console.log(resposta)
         expect(resposta).toBeDefined()
         expect(resposta.id).toBe('id01')
         expect(resposta.titulo).toBe('Recado 1')
