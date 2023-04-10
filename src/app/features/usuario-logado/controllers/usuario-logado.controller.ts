@@ -7,22 +7,32 @@ import { ExcluirUsuarioLogadoUseCase } from "../usecases/excluir-usuario-logado.
 
 export class UsuarioLogadoController {
     async getUserLoggedById (req: Request, res: Response) {
-        const { token } = req.params
+        try{
+            const { token } = req.params;
 
-        const usecase = new ObterUsuarioLogadoPorIdUseCase(new UsuarioLogadoRepository)
-        const resposta =  await usecase.execute(token)
+            const usecase = new ObterUsuarioLogadoPorIdUseCase(new UsuarioLogadoRepository);
+            const resposta =  await usecase.execute(token);
 
-        if(!resposta) return HttpHelper.reqError(res, 'Não há usuario logado', 404);
-        return HttpHelper.success(res, resposta, 'Autorizado', 200);
-    }
+            if(!resposta) return HttpHelper.reqError(res, 'Não há usuario logado', 404);
+            return HttpHelper.success(res, resposta, 'Autorizado', 200);
+
+        } catch (error: any) {
+            HttpHelper.serverError(res, error);
+        };
+    };
 
     async logoutUser (req: Request, res: Response) {
-        const { token } = req.params
+        try {
+            const { token } = req.params;
 
-        const usecase = new ExcluirUsuarioLogadoUseCase(new UsuarioLogadoRepository);
-        const resposta  = await usecase.execute(token);
+            const usecase = new ExcluirUsuarioLogadoUseCase(new UsuarioLogadoRepository);
+            const resposta  = await usecase.execute(token);
 
-        if (!resposta) return HttpHelper.reqError(res, 'Não foi excluido nenhum usuario logado');
-        return HttpHelper.success(res, null, 'Deslogado', 200)
-    }
-}
+            if (!resposta) return HttpHelper.reqError(res, 'Não foi excluido nenhum usuario logado');
+            return HttpHelper.success(res, null, 'Deslogado', 200);
+
+        } catch (error: any) {
+            HttpHelper.serverError(res, error);
+        };
+    };
+};

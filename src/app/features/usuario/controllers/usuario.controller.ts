@@ -34,11 +34,15 @@ export class UsuarioController {
     }
 
     async getAll(req: Request, res: Response) {
-        const { senha } = req.params
+        try{
+            const { senha } = req.params
 
-        const usecase = new ListarUsuariosUseCase(new UsuarioRepository())
-        const resposta = await usecase.list(senha)
+            const usecase = new ListarUsuariosUseCase(new UsuarioRepository())
+            const resposta = await usecase.list(senha)
 
-        res.json(resposta)
+            res.json(resposta)
+        } catch (error: any) {
+            HttpHelper.serverError(res, error)
+        }
     }
 }

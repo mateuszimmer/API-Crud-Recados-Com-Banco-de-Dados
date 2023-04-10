@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { checkEmailESenha } from "../../../shared/middlewares/checkEmailESenha";
-import { checkSenhaResenha } from "../../../shared/middlewares/checkSenhaResenha";
+import { checkEmailESenha } from "../../../shared/middlewares/check-email-senha.middlewares";
+import { checkSenhaResenha } from "../../../shared/middlewares/check-senha-resenha.middleware";
 import { UsuarioController } from "../controllers/usuario.controller";
 import { verificaExisteUsuario } from "../validator/verifica-existe-usuario.validator";
 
