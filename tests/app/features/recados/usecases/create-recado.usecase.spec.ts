@@ -6,19 +6,8 @@ import { RecadoEntity } from '../../../../../src/app/shared/entities/recado.enti
 import { CacheRepository } from '../../../../../src/app/shared/database/repositories/cache.repository';
 
 beforeAll(async () => {
-    try{
-        await DatabaseConnection.connect();
-    } catch (error) {
-        throw new Error("não foi possível desconectar o banco de dados")
-    }
-
-    try{
-        await RedisConnection.connect();
-    } catch (error) {
-        throw new Error("não foi possível desconectar o redis")
-    }
-
-    return
+    await DatabaseConnection.connect();
+    await RedisConnection.connect();
 });
 
 afterAll(async () => {
@@ -27,7 +16,6 @@ afterAll(async () => {
 });
 
 describe('Criar um recado', () => {
-
 
     beforeEach(() => {
         jest.clearAllMocks();
